@@ -1,6 +1,6 @@
 # ===== 运行时数据（重要：里面存着登录 cookie，绝对不能提交）=====
-.config/
-.cache/
+.config
+.cache
 
 # ===== Python =====
 __pycache__/

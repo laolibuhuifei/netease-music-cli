@@ -7,6 +7,14 @@
 首个公开版本。在 Raspberry Pi Zero 2W（Raspbian 12 / armv7l / 425MB 可用内存）
 上完成全链路实测。
 
+### 命名与信息
+
+- 程序名统一为 `netease-music-cli`，命令同时提供短别名 `netease`
+- 新增 `about.py` 集中管理名称 / 版本 / 作者，改名字只需改一处
+- 新增 `--version` / `-V`，输出名称、版本、作者、仓库、许可证
+- `--help`、`diag`、退出提示、`install.sh`、部署验证脚本均带作者信息
+- 作者：laolibuhuifei · 许可证：MIT
+
 ### 功能
 
 - 终端交互界面（rich + 备用屏幕），支持播放/暂停、上下曲、进度、音量、

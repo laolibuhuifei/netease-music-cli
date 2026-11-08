@@ -1,10 +1,13 @@
 #!/bin/bash
-# Raspi-Netease CLI 启动器
-# 用法: netease [命令] [参数]
-#   netease              交互模式
-#   netease login        扫码登录
-#   netease search 晴天   搜索
-#   netease play 186016  按ID播放
+# netease-music-cli 启动器
+# 用法: netease-music-cli [命令] [参数]
+#   netease-music-cli              交互模式
+#   netease-music-cli login        扫码登录
+#   netease-music-cli search 晴天   搜索
+#   netease-music-cli play 186016  按ID播放
+#   netease-music-cli --version    版本与作者
+#
+# 兼容短命令 netease（install.sh 会创建同名软链接）。
 
 cd "$(dirname "$(readlink -f "$0")")" || exit 1
 

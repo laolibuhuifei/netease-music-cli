@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
-"""Raspi-Netease CLI - 树莓派网易云命令行客户端。
+"""低性能设备（树莓派 Zero 2W 等）上的网易云音乐命令行客户端。
 
 用法：
-    python3 main.py              # 进入交互模式
-    python3 main.py login        # 扫码登录
-    python3 main.py search "晴天"  # 搜索歌曲
-    python3 main.py play 186016   # 播放指定歌曲ID
-    python3 main.py playlist      # 查看歌单
-    python3 main.py recommend     # 每日推荐
-    python3 main.py diag          # 终端环境诊断（界面显示异常时用）
+    netease-music-cli              # 进入交互模式
+    netease-music-cli login        # 扫码登录
+    netease-music-cli search 晴天   # 搜索歌曲
+    netease-music-cli play 186016  # 播放指定歌曲ID
+    netease-music-cli playlist     # 查看歌单
+    netease-music-cli recommend    # 每日推荐
+    netease-music-cli diag         # 终端环境诊断（界面显示异常时用）
+    netease-music-cli --version    # 查看版本与作者
 
 环境变量：
     NETEASE_PLAIN=1   强制纯文本模式（终端不支持 ANSI 时）
@@ -26,6 +27,7 @@ from rich.console import Console
 from rich.live import Live
 from rich.panel import Panel
 
+from about import APP_AUTHOR, APP_NAME, APP_REPO, APP_VERSION, banner_lines
 from api.client import NeteaseAPI
 from auth.login import LoginManager
 from cache.db import CacheDB
@@ -285,7 +287,7 @@ class App:
         # 检查登录状态（进入 Live 之前输出）
         if not self.config.get("music_u"):
             self.console.print("[yellow]未检测到登录信息，仅能播放免费歌曲[/yellow]")
-            self.console.print("[dim]运行 netease login 扫码登录可解锁全部歌曲[/dim]\n")
+            self.console.print("[dim]运行 netease-music-cli login 扫码登录可解锁全部歌曲[/dim]\n")
             time.sleep(1.2)
 
         # 注册信号处理
@@ -339,6 +341,11 @@ class App:
             self.tui.disable_raw_input()
             self.cleanup()
 
+        # 退出备用屏幕后再打一行署名，不干扰界面
+        self.console.print(
+            f"[dim]{APP_NAME} v{APP_VERSION} · by {APP_AUTHOR} · {APP_REPO}[/dim]"
+        )
+
     def _run_plain(self):
         """纯文本模式：不使用 Live / 备用屏幕，逐行输出状态。
 
@@ -348,8 +355,8 @@ class App:
         if not sys.stdin.isatty():
             self.console.print("[yellow]检测到当前不是交互终端，无法接收按键。[/yellow]")
             self.console.print("请用以下方式运行：")
-            self.console.print("  ssh -t pi@<ip> netease    （强制分配 tty）")
-            self.console.print("  netease search 关键词      （非交互命令）")
+            self.console.print("  ssh -t <用户名>@<设备地址> netease-music-cli    （强制分配 tty）")
+            self.console.print("  netease-music-cli search 关键词                 （非交互命令）")
             cur = self.queue.current()
             if cur:
                 self.console.print(f"当前歌曲: {cur['name']} - {cur['artist']}")
@@ -568,7 +575,8 @@ class App:
         import platform
 
         print("=" * 52)
-        print(" Raspi-Netease CLI 环境诊断")
+        print(f" {APP_NAME} v{APP_VERSION} 环境诊断")
+        print(f" 作者: {APP_AUTHOR}  {APP_REPO}")
         print("=" * 52)
         print(f" TERM              : {os.environ.get('TERM')!r}")
         print(f" COLORTERM         : {os.environ.get('COLORTERM')!r}")
@@ -603,7 +611,7 @@ class App:
             print(" TERM 异常，建议执行： export TERM=xterm-256color")
         if not sys.stdout.isatty():
             print(" 输出被重定向，无法显示交互界面")
-        print(" 强制纯文本模式： NETEASE_PLAIN=1 netease")
+        print(" 强制纯文本模式： NETEASE_PLAIN=1 netease-music-cli")
 
     def cmd_login(self):
         """登录命令。"""
@@ -788,6 +796,21 @@ class App:
         self.console.print(table)
 
 
+def print_banner():
+    """打印程序名、版本、作者、仓库地址。"""
+    for line in banner_lines():
+        print(line)
+
+
+def print_help():
+    """帮助信息 = 横幅 + 用法。"""
+    print_banner()
+    print()
+    print(__doc__.split("用法：", 1)[1].strip())
+    print()
+    print(f"详细文档: {APP_REPO}#readme")
+
+
 def main():
     """主入口。"""
     if len(sys.argv) < 2:
@@ -800,16 +823,18 @@ def main():
     cmd = sys.argv[1]
     app = App()
 
-    if cmd == "login":
+    if cmd in ("-V", "--version", "version"):
+        print_banner()
+    elif cmd == "login":
         app.cmd_login()
     elif cmd == "search":
         if len(sys.argv) < 3:
-            print("用法: python3 main.py search <关键词>")
+            print(f"用法: {APP_NAME} search <关键词>")
             return
         app.cmd_search(" ".join(sys.argv[2:]))
     elif cmd == "play":
         if len(sys.argv) < 3:
-            print("用法: python3 main.py play <歌曲ID>")
+            print(f"用法: {APP_NAME} play <歌曲ID>")
             return
         try:
             song_id = int(sys.argv[2])
@@ -824,10 +849,11 @@ def main():
     elif cmd == "diag":
         app.cmd_diag()
     elif cmd in ("-h", "--help", "help"):
-        print(__doc__)
+        print_help()
     else:
         print(f"未知命令: {cmd}")
-        print(__doc__)
+        print()
+        print_help()
 
 
 if __name__ == "__main__":

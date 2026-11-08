@@ -7,6 +7,8 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from about import APP_AUTHOR, APP_NAME, APP_REPO, APP_VERSION  # noqa: E402
+
 OK = "[OK]  "
 FAIL = "[FAIL]"
 
@@ -23,7 +25,8 @@ def check(label, fn):
 
 def main():
     print("=" * 60)
-    print(" Raspi-Netease CLI 部署验证")
+    print(f" {APP_NAME} v{APP_VERSION} 部署验证")
+    print(f" 作者: {APP_AUTHOR}  {APP_REPO}")
     print("=" * 60)
 
     # 1. 依赖

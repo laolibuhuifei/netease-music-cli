@@ -18,6 +18,7 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
 
+from about import APP_NAME
 from api.client import NeteaseAPI
 from player.queue import PlayQueue
 
@@ -349,7 +350,7 @@ class TUI:
         current = self.queue.current()
 
         header = Text()
-        header.append(" Raspi-Netease CLI", style="bold cyan")
+        header.append(f" {APP_NAME}", style="bold cyan")
         header.append(" | ", style="dim")
         header.append(self.queue.get_mode_label(), style="yellow")
 
