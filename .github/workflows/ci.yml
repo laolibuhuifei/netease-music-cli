@@ -9,11 +9,14 @@ on:
 jobs:
   test:
     name: test (py${{ matrix.python-version }})
-    runs-on: ubuntu-latest
+    # 不用 ubuntu-latest：它已经指向 Ubuntu 26.04，
+    # 而 setup-python 在该镜像上没有 3.9 的构建（会直接失败）。
+    # 固定到 24.04 才能保留 3.9 的兼容性验证。
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.11", "3.12"]
+        python-version: ["3.9", "3.11", "3.13"]
 
     steps:
       - uses: actions/checkout@v4

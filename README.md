@@ -463,7 +463,7 @@ pip install ruff
 ruff check .
 ```
 
-提交后 GitHub Actions 会在 Python 3.9 / 3.11 / 3.12 上自动跑
+提交后 GitHub Actions 会在 Python 3.9 / 3.11 / 3.13 上自动跑
 语法检查、ruff、单元测试和模块导入自检，配置见
 [`.github/workflows/ci.yml`](.github/workflows/ci.yml)。
 
