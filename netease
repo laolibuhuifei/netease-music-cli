@@ -1,0 +1,31 @@
+#!/bin/bash
+# Raspi-Netease CLI 启动器
+# 用法: netease [命令] [参数]
+#   netease              交互模式
+#   netease login        扫码登录
+#   netease search 晴天   搜索
+#   netease play 186016  按ID播放
+
+cd "$(dirname "$(readlink -f "$0")")" || exit 1
+
+# 确保依赖可导入（apt 装的包在 dist-packages，一般无需额外设置）
+export PYTHONPATH="$PWD:${PYTHONPATH}"
+
+# TERM 上报异常（空/dumb）时兜底，否则 rich 会认为终端不支持渲染，
+# 界面会一片空白。仅在确实连着终端时处理。
+if [ -t 1 ]; then
+    case "${TERM:-}" in
+        ""|dumb|unknown|cons25)
+            export TERM=xterm-256color
+            ;;
+    esac
+fi
+
+# 终端太小时给个提示
+COLS=$(tput cols 2>/dev/null || echo 80)
+ROWS=$(tput lines 2>/dev/null || echo 24)
+if [ "$ROWS" -lt 18 ] || [ "$COLS" -lt 60 ]; then
+    echo "[提示] 当前终端 ${COLS}x${ROWS}，建议至少 80x24 以获得完整界面"
+fi
+
+exec python3 main.py "$@"

@@ -1,0 +1,19 @@
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = [
+    "E501",  # 行宽交给 line-length 处理，中文注释不强制
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# tests/test_tui_keys.py 是端到端脚本（自建 pty、需要网络），
+# 默认不在 pytest 里自动跑，需要时手动执行：
+#   python3 tests/test_tui_keys.py
+addopts = "-m 'not e2e'"
+markers = [
+    "e2e: 端到端测试，依赖真实终端与网络",
+]

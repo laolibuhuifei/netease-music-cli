@@ -1,0 +1,33 @@
+# ===== 运行时数据（重要：里面存着登录 cookie，绝对不能提交）=====
+.config/
+.cache/
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ===== 编辑器 / 系统 =====
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# ===== 本地私有配置 =====
+*.local
+.env

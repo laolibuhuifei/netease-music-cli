@@ -1,0 +1,5 @@
+[Profile]
+FirstInputMethod=fcitx-keyboard-us
+LastBuiltinLayout=us
+IMNameList=fcitx-keyboard-us,fcitx-pinyin
+EnabledIMList=fcitx-keyboard-us:True,fcitx-pinyin:True
