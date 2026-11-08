@@ -463,9 +463,9 @@ pip install ruff
 ruff check .
 ```
 
-> CI 配置放在 [`docs/ci-workflow.yml`](docs/ci-workflow.yml)。
-> 启用方法：复制到 `.github/workflows/ci.yml` 后提交
-> （注意：用 PAT 推送 workflow 文件需要 token 具备 **Workflows** 权限）。
+提交后 GitHub Actions 会在 Python 3.9 / 3.11 / 3.12 上自动跑
+语法检查、ruff、单元测试和模块导入自检，配置见
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml)。
 
 ## 已知限制
 
