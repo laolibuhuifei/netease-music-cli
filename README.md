@@ -463,6 +463,10 @@ pip install ruff
 ruff check .
 ```
 
+> CI 配置放在 [`docs/ci-workflow.yml`](docs/ci-workflow.yml)。
+> 启用方法：复制到 `.github/workflows/ci.yml` 后提交
+> （注意：用 PAT 推送 workflow 文件需要 token 具备 **Workflows** 权限）。
+
 ## 已知限制
 
 - 播放控制依赖 mpv 的 IPC socket，同一时间只支持一个实例
